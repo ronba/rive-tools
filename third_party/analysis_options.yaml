@@ -1,0 +1,4 @@
+# Ignore dart files from third party modules.
+analyzer:
+  exclude:
+    - "**/*"
