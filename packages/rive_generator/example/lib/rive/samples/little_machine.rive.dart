@@ -9,16 +9,16 @@ class Little_machine {
   static final assetPath = 'samples/little_machine.riv';
 
   Little_machine._(this.file);
-  
+
   static Future<Little_machine> load() async {
-    final riveFile = rive.RiveFile.import(await rootBundle.load('samples/little_machine.riv')); 
+    final riveFile = rive.RiveFile.import(
+        await rootBundle.load('samples/little_machine.riv'));
     return Little_machine._(riveFile);
   }
 
   NewArtboard? _newArtboard;
-  NewArtboard get newArtboard => _newArtboard ??= NewArtboard(file.artboardByName('New Artboard')!);
-    
-
+  NewArtboard get newArtboard =>
+      _newArtboard ??= NewArtboard(file.artboardByName('New Artboard')!);
 }
 
 class NewArtboard {
@@ -27,8 +27,11 @@ class NewArtboard {
 
   final animations = const NewArtboardAnimations();
 
-  NewArtboardStateMachine1StateMachine getNewArtboardStateMachine1StateMachine([core.OnStateChange? onStateChange]) {
-    return NewArtboardStateMachine1StateMachine(this.artboard.stateMachineByName("State Machine 1",onChange: onStateChange)!);
+  NewArtboardStateMachine1StateMachine getNewArtboardStateMachine1StateMachine(
+      [core.OnStateChange? onStateChange]) {
+    return NewArtboardStateMachine1StateMachine(this
+        .artboard
+        .stateMachineByName("State Machine 1", onChange: onStateChange)!);
   }
 }
 
@@ -43,9 +46,6 @@ class NewArtboardAnimations {
 class NewArtboardStateMachine1StateMachine {
   final rive.StateMachineController controller;
   final rive.SMITrigger trigger1;
-  NewArtboardStateMachine1StateMachine(this.controller) :
-    trigger1 = controller.findInput<bool>('Trigger 1') as rive.SMITrigger;
+  NewArtboardStateMachine1StateMachine(this.controller)
+      : trigger1 = controller.findInput<bool>('Trigger 1') as rive.SMITrigger;
 }
-
-
- 

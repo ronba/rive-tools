@@ -9,16 +9,16 @@ class Skills {
   static final assetPath = 'samples/skills.riv';
 
   Skills._(this.file);
-  
+
   static Future<Skills> load() async {
-    final riveFile = rive.RiveFile.import(await rootBundle.load('samples/skills.riv')); 
+    final riveFile =
+        rive.RiveFile.import(await rootBundle.load('samples/skills.riv'));
     return Skills._(riveFile);
   }
 
   NewArtboard? _newArtboard;
-  NewArtboard get newArtboard => _newArtboard ??= NewArtboard(file.artboardByName('New Artboard')!);
-    
-
+  NewArtboard get newArtboard =>
+      _newArtboard ??= NewArtboard(file.artboardByName('New Artboard')!);
 }
 
 class NewArtboard {
@@ -27,11 +27,18 @@ class NewArtboard {
 
   final animations = const NewArtboardAnimations();
 
-  NewArtboardDesignersTestStateMachine getNewArtboardDesignersTestStateMachine([core.OnStateChange? onStateChange]) {
-    return NewArtboardDesignersTestStateMachine(this.artboard.stateMachineByName("Designer's Test",onChange: onStateChange)!);
+  NewArtboardDesignersTestStateMachine getNewArtboardDesignersTestStateMachine(
+      [core.OnStateChange? onStateChange]) {
+    return NewArtboardDesignersTestStateMachine(this
+        .artboard
+        .stateMachineByName("Designer's Test", onChange: onStateChange)!);
   }
-NewArtboardStateMachine1StateMachine getNewArtboardStateMachine1StateMachine([core.OnStateChange? onStateChange]) {
-    return NewArtboardStateMachine1StateMachine(this.artboard.stateMachineByName("State Machine 1",onChange: onStateChange)!);
+
+  NewArtboardStateMachine1StateMachine getNewArtboardStateMachine1StateMachine(
+      [core.OnStateChange? onStateChange]) {
+    return NewArtboardStateMachine1StateMachine(this
+        .artboard
+        .stateMachineByName("State Machine 1", onChange: onStateChange)!);
   }
 }
 
@@ -55,18 +62,16 @@ class NewArtboardAnimations {
 class NewArtboardDesignersTestStateMachine {
   final rive.StateMachineController controller;
   final rive.SMINumber level;
-  NewArtboardDesignersTestStateMachine(this.controller) :
-    level = controller.findInput<double>('Level') as rive.SMINumber;
+  NewArtboardDesignersTestStateMachine(this.controller)
+      : level = controller.findInput<double>('Level') as rive.SMINumber;
 }
 
 class NewArtboardStateMachine1StateMachine {
   final rive.StateMachineController controller;
   final rive.SMIBool intermediate;
   final rive.SMIBool expert;
-  NewArtboardStateMachine1StateMachine(this.controller) :
-    intermediate = controller.findInput<bool>('Intermediate ') as rive.SMIBool,
-    expert = controller.findInput<bool>('Expert') as rive.SMIBool;
+  NewArtboardStateMachine1StateMachine(this.controller)
+      : intermediate =
+            controller.findInput<bool>('Intermediate ') as rive.SMIBool,
+        expert = controller.findInput<bool>('Expert') as rive.SMIBool;
 }
-
-
- 

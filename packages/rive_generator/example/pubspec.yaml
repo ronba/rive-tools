@@ -30,6 +30,8 @@ flutter:
 rive_generator:
   # Directory to scan for .riv files, by default it's assets.
   assets: assets
+  # Whether to output files in the output directory.
+  format_output: true
   # Output directory for generated files.
   # Files will maintain the same folder structure as in the assets folder.
   output: lib/rive

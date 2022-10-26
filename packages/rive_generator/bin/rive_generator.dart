@@ -10,18 +10,24 @@ import 'package:yaml/yaml.dart';
 class RiveGeneratorConfiguration {
   static final log = Logger('RiveGeneratorConfiguration');
   static const String _riveGeneratorConfigurationKey = 'rive_generator';
+
   static const String _assetDirectoryKey = "assets";
   static const String _assetDirectoryDefaultValue = "assets";
 
   static final String _outputDirectoryKey = 'output';
   static final String _outputDirectoryDefaultValue = join('lib', 'rive');
 
+  static final String _formatOutputKey = 'format_output';
+  static final bool _formatOutputDefaultValue = true;
+
   final Directory assetsDirectory; // = "assets";
   final Directory generatedFiledOutput;
+  final bool formatOutput;
 
   factory RiveGeneratorConfiguration.fromYaml(YamlMap pubspec) {
     var assets = _assetDirectoryDefaultValue;
     var outputDirectory = _outputDirectoryDefaultValue;
+    var formatOutput = _formatOutputDefaultValue;
 
     if (pubspec.containsKey(_riveGeneratorConfigurationKey)) {
       final configuration = pubspec[_riveGeneratorConfigurationKey];
@@ -33,15 +39,21 @@ class RiveGeneratorConfiguration {
         if (configuration.containsKey(_outputDirectoryKey)) {
           outputDirectory = configuration[_outputDirectoryKey];
         }
+        if (configuration.containsKey(_formatOutputKey)) {
+          formatOutput = configuration[_formatOutputKey];
+        }
       }
     }
     return RiveGeneratorConfiguration._(
-        assetsDirectory: Directory(assets),
-        generatedFiledOutput: Directory(outputDirectory));
+      assetsDirectory: Directory(assets),
+      formatOutput: formatOutput,
+      generatedFiledOutput: Directory(outputDirectory),
+    );
   }
 
   RiveGeneratorConfiguration._({
     required this.assetsDirectory,
+    required this.formatOutput,
     required this.generatedFiledOutput,
   });
 
@@ -92,5 +104,10 @@ void main(List<String> arguments) {
             ..sort(
               (a, b) => a.name.compareTo(b.name),
             )));
+  }
+
+  if (configuration.formatOutput) {
+    Process.runSync('flutter',
+        ['format', configuration.generatedFiledOutput.path, '--fix']);
   }
 }

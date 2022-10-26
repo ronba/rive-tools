@@ -9,16 +9,16 @@ class Light_switch {
   static final assetPath = 'samples/light_switch.riv';
 
   Light_switch._(this.file);
-  
+
   static Future<Light_switch> load() async {
-    final riveFile = rive.RiveFile.import(await rootBundle.load('samples/light_switch.riv')); 
+    final riveFile =
+        rive.RiveFile.import(await rootBundle.load('samples/light_switch.riv'));
     return Light_switch._(riveFile);
   }
 
   NewArtboard? _newArtboard;
-  NewArtboard get newArtboard => _newArtboard ??= NewArtboard(file.artboardByName('New Artboard')!);
-    
-
+  NewArtboard get newArtboard =>
+      _newArtboard ??= NewArtboard(file.artboardByName('New Artboard')!);
 }
 
 class NewArtboard {
@@ -27,8 +27,10 @@ class NewArtboard {
 
   final animations = const NewArtboardAnimations();
 
-  NewArtboardSwitchStateMachine getNewArtboardSwitchStateMachine([core.OnStateChange? onStateChange]) {
-    return NewArtboardSwitchStateMachine(this.artboard.stateMachineByName("Switch",onChange: onStateChange)!);
+  NewArtboardSwitchStateMachine getNewArtboardSwitchStateMachine(
+      [core.OnStateChange? onStateChange]) {
+    return NewArtboardSwitchStateMachine(
+        this.artboard.stateMachineByName("Switch", onChange: onStateChange)!);
   }
 }
 
@@ -41,9 +43,6 @@ class NewArtboardAnimations {
 class NewArtboardSwitchStateMachine {
   final rive.StateMachineController controller;
   final rive.SMIBool on;
-  NewArtboardSwitchStateMachine(this.controller) :
-    on = controller.findInput<bool>('On') as rive.SMIBool;
+  NewArtboardSwitchStateMachine(this.controller)
+      : on = controller.findInput<bool>('On') as rive.SMIBool;
 }
-
-
- 

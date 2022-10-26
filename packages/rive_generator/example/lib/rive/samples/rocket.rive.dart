@@ -9,16 +9,16 @@ class Rocket {
   static final assetPath = 'samples/rocket.riv';
 
   Rocket._(this.file);
-  
+
   static Future<Rocket> load() async {
-    final riveFile = rive.RiveFile.import(await rootBundle.load('samples/rocket.riv')); 
+    final riveFile =
+        rive.RiveFile.import(await rootBundle.load('samples/rocket.riv'));
     return Rocket._(riveFile);
   }
 
   NewArtboard? _newArtboard;
-  NewArtboard get newArtboard => _newArtboard ??= NewArtboard(file.artboardByName('New Artboard')!);
-    
-
+  NewArtboard get newArtboard =>
+      _newArtboard ??= NewArtboard(file.artboardByName('New Artboard')!);
 }
 
 class NewArtboard {
@@ -27,8 +27,10 @@ class NewArtboard {
 
   final animations = const NewArtboardAnimations();
 
-  NewArtboardButtonStateMachine getNewArtboardButtonStateMachine([core.OnStateChange? onStateChange]) {
-    return NewArtboardButtonStateMachine(this.artboard.stateMachineByName("Button",onChange: onStateChange)!);
+  NewArtboardButtonStateMachine getNewArtboardButtonStateMachine(
+      [core.OnStateChange? onStateChange]) {
+    return NewArtboardButtonStateMachine(
+        this.artboard.stateMachineByName("Button", onChange: onStateChange)!);
   }
 }
 
@@ -43,10 +45,7 @@ class NewArtboardButtonStateMachine {
   final rive.StateMachineController controller;
   final rive.SMIBool hover;
   final rive.SMIBool press;
-  NewArtboardButtonStateMachine(this.controller) :
-    hover = controller.findInput<bool>('Hover') as rive.SMIBool,
-    press = controller.findInput<bool>('Press') as rive.SMIBool;
+  NewArtboardButtonStateMachine(this.controller)
+      : hover = controller.findInput<bool>('Hover') as rive.SMIBool,
+        press = controller.findInput<bool>('Press') as rive.SMIBool;
 }
-
-
- 

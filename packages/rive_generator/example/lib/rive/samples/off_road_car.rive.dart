@@ -9,16 +9,16 @@ class Off_road_car {
   static final assetPath = 'samples/off_road_car.riv';
 
   Off_road_car._(this.file);
-  
+
   static Future<Off_road_car> load() async {
-    final riveFile = rive.RiveFile.import(await rootBundle.load('samples/off_road_car.riv')); 
+    final riveFile =
+        rive.RiveFile.import(await rootBundle.load('samples/off_road_car.riv'));
     return Off_road_car._(riveFile);
   }
 
   NewArtboard? _newArtboard;
-  NewArtboard get newArtboard => _newArtboard ??= NewArtboard(file.artboardByName('New Artboard')!);
-    
-
+  NewArtboard get newArtboard =>
+      _newArtboard ??= NewArtboard(file.artboardByName('New Artboard')!);
 }
 
 class NewArtboard {
@@ -27,8 +27,11 @@ class NewArtboard {
 
   final animations = const NewArtboardAnimations();
 
-  NewArtboardStateMachine1StateMachine getNewArtboardStateMachine1StateMachine([core.OnStateChange? onStateChange]) {
-    return NewArtboardStateMachine1StateMachine(this.artboard.stateMachineByName("State Machine 1",onChange: onStateChange)!);
+  NewArtboardStateMachine1StateMachine getNewArtboardStateMachine1StateMachine(
+      [core.OnStateChange? onStateChange]) {
+    return NewArtboardStateMachine1StateMachine(this
+        .artboard
+        .stateMachineByName("State Machine 1", onChange: onStateChange)!);
   }
 }
 
@@ -44,8 +47,5 @@ class NewArtboardAnimations {
 class NewArtboardStateMachine1StateMachine {
   final rive.StateMachineController controller;
 
-  NewArtboardStateMachine1StateMachine(this.controller) ;
+  NewArtboardStateMachine1StateMachine(this.controller);
 }
-
-
- 
