@@ -24,7 +24,7 @@ class Liquid_download {
 
   Artboard? _artboard;
   Artboard get artboard =>
-      _artboard ??= Artboard(file.artboardByName('Artboard')!);
+      _artboard ??= Artboard(file.artboardByName(r'Artboard')!);
 }
 
 class Artboard {
@@ -41,15 +41,15 @@ class Artboard {
 }
 
 class ArtboardAnimations {
-  final String demo = "Demo";
-  final String complete = "Complete";
-  final String indeterminate = "Indeterminate";
-  final String determinate = "Determinate";
-  final String start = "Start";
-  final String idle = "Idle";
-  final String reset = "Reset";
-  final String zeroDownload = "ZeroDownload";
-  final String oneHundredDownload = "OneHundredDownload";
+  final String demo = r"Demo";
+  final String complete = r"Complete";
+  final String indeterminate = r"Indeterminate";
+  final String determinate = r"Determinate";
+  final String start = r"Start";
+  final String idle = r"Idle";
+  final String reset = r"Reset";
+  final String zeroDownload = r"ZeroDownload";
+  final String oneHundredDownload = r"OneHundredDownload";
   const ArtboardAnimations();
 }
 
@@ -59,7 +59,7 @@ class ArtboardDownloadStateMachine {
   final rive.SMINumber progress;
   final rive.SMINumber indetMix;
   ArtboardDownloadStateMachine(this.controller)
-      : download = controller.findInput<bool>('Download') as rive.SMITrigger,
-        progress = controller.findInput<double>('Progress') as rive.SMINumber,
-        indetMix = controller.findInput<double>('Indet Mix') as rive.SMINumber;
+      : download = controller.findInput<bool>(r'Download') as rive.SMITrigger,
+        progress = controller.findInput<double>(r'Progress') as rive.SMINumber,
+        indetMix = controller.findInput<double>(r'Indet Mix') as rive.SMINumber;
 }

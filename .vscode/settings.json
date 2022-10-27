@@ -19,7 +19,8 @@
     "editor.inlayHints.enabled": "offUnlessPressed",
     "editor.codeActionsOnSave": {
       "source.fixAll": true,
-      "source.organizeImports": true
+      "source.organizeImports": true,
+      "source.sortMembers": true
     }
   }
 }

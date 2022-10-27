@@ -23,7 +23,7 @@ class Skills {
 
   NewArtboard? _newArtboard;
   NewArtboard get newArtboard =>
-      _newArtboard ??= NewArtboard(file.artboardByName('New Artboard')!);
+      _newArtboard ??= NewArtboard(file.artboardByName(r'New Artboard')!);
 }
 
 class NewArtboard {
@@ -48,19 +48,19 @@ class NewArtboard {
 }
 
 class NewArtboardAnimations {
-  final String expert_idle = "Expert_idle";
-  final String expert_hover = "Expert_hover";
-  final String expert_press = "Expert_press";
-  final String intermediate_idle = "Intermediate_idle";
-  final String intermediate_hover = "Intermediate_hover";
-  final String intermediate_press = "Intermediate_press";
-  final String beginner_idle = "Beginner_idle";
-  final String beginner_hover = "Beginner_hover";
-  final String beginner_press = "Beginner_press";
-  final String beginner = "Beginner";
-  final String intermediate = "Intermediate";
-  final String expert = "Expert";
-  final String test = "Test";
+  final String expert_idle = r"Expert_idle";
+  final String expert_hover = r"Expert_hover";
+  final String expert_press = r"Expert_press";
+  final String intermediate_idle = r"Intermediate_idle";
+  final String intermediate_hover = r"Intermediate_hover";
+  final String intermediate_press = r"Intermediate_press";
+  final String beginner_idle = r"Beginner_idle";
+  final String beginner_hover = r"Beginner_hover";
+  final String beginner_press = r"Beginner_press";
+  final String beginner = r"Beginner";
+  final String intermediate = r"Intermediate";
+  final String expert = r"Expert";
+  final String test = r"Test";
   const NewArtboardAnimations();
 }
 
@@ -68,7 +68,7 @@ class NewArtboardDesignersTestStateMachine {
   final rive.StateMachineController controller;
   final rive.SMINumber level;
   NewArtboardDesignersTestStateMachine(this.controller)
-      : level = controller.findInput<double>('Level') as rive.SMINumber;
+      : level = controller.findInput<double>(r'Level') as rive.SMINumber;
 }
 
 class NewArtboardStateMachine1StateMachine {
@@ -77,6 +77,6 @@ class NewArtboardStateMachine1StateMachine {
   final rive.SMIBool expert;
   NewArtboardStateMachine1StateMachine(this.controller)
       : intermediate =
-            controller.findInput<bool>('Intermediate ') as rive.SMIBool,
-        expert = controller.findInput<bool>('Expert') as rive.SMIBool;
+            controller.findInput<bool>(r'Intermediate ') as rive.SMIBool,
+        expert = controller.findInput<bool>(r'Expert') as rive.SMIBool;
 }

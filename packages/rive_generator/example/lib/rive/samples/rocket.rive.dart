@@ -23,7 +23,7 @@ class Rocket {
 
   NewArtboard? _newArtboard;
   NewArtboard get newArtboard =>
-      _newArtboard ??= NewArtboard(file.artboardByName('New Artboard')!);
+      _newArtboard ??= NewArtboard(file.artboardByName(r'New Artboard')!);
 }
 
 class NewArtboard {
@@ -40,9 +40,9 @@ class NewArtboard {
 }
 
 class NewArtboardAnimations {
-  final String idle = "idle";
-  final String roll_over = "Roll_over";
-  final String press = "Press";
+  final String idle = r"idle";
+  final String roll_over = r"Roll_over";
+  final String press = r"Press";
   const NewArtboardAnimations();
 }
 
@@ -51,6 +51,6 @@ class NewArtboardButtonStateMachine {
   final rive.SMIBool hover;
   final rive.SMIBool press;
   NewArtboardButtonStateMachine(this.controller)
-      : hover = controller.findInput<bool>('Hover') as rive.SMIBool,
-        press = controller.findInput<bool>('Press') as rive.SMIBool;
+      : hover = controller.findInput<bool>(r'Hover') as rive.SMIBool,
+        press = controller.findInput<bool>(r'Press') as rive.SMIBool;
 }

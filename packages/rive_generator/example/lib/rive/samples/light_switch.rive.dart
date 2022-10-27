@@ -23,7 +23,7 @@ class Light_switch {
 
   NewArtboard? _newArtboard;
   NewArtboard get newArtboard =>
-      _newArtboard ??= NewArtboard(file.artboardByName('New Artboard')!);
+      _newArtboard ??= NewArtboard(file.artboardByName(r'New Artboard')!);
 }
 
 class NewArtboard {
@@ -40,8 +40,8 @@ class NewArtboard {
 }
 
 class NewArtboardAnimations {
-  final String off = "Off";
-  final String on = "On";
+  final String off = r"Off";
+  final String on = r"On";
   const NewArtboardAnimations();
 }
 
@@ -49,5 +49,5 @@ class NewArtboardSwitchStateMachine {
   final rive.StateMachineController controller;
   final rive.SMIBool on;
   NewArtboardSwitchStateMachine(this.controller)
-      : on = controller.findInput<bool>('On') as rive.SMIBool;
+      : on = controller.findInput<bool>(r'On') as rive.SMIBool;
 }
