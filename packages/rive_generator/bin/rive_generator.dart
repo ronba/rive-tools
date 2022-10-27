@@ -35,6 +35,10 @@ class RiveGeneratorConfiguration {
       if (configuration is YamlMap) {
         if (configuration.containsKey(_assetDirectoryKey)) {
           assets = configuration[_assetDirectoryKey];
+          // Sanitize directory path ending with '/'.
+          if (assets.endsWith('/')) {
+            assets = assets.substring(0, assets.length - 1);
+          }
         }
         if (configuration.containsKey(_outputDirectoryKey)) {
           outputDirectory = configuration[_outputDirectoryKey];
@@ -99,7 +103,11 @@ void main(List<String> arguments) {
     File(outputFileName)
       ..createSync(recursive: true)
       ..writeAsStringSync(lazyRiveFileTemplate(
-          RiveInfo(className, pathWithoutAssets),
+          RiveInfo(
+            className,
+            configuration.assetsDirectory.path,
+            pathWithoutAssets,
+          ),
           rive.artboards.map(GeneratedArtboard.new).toList()
             ..sort(
               (a, b) => a.name.compareTo(b.name),
