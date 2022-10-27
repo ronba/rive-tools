@@ -119,6 +119,10 @@ void main(List<String> arguments) {
     if (Platform.isWindows) {
       generatedOutputPath = windows.joinAll(posix.split(generatedOutputPath));
     }
-    Process.runSync('flutter', ['format', generatedOutputPath, '--fix']);
+    Process.runSync(
+      'flutter',
+      ['format', generatedOutputPath, '--fix'],
+      runInShell: true,
+    );
   }
 }
