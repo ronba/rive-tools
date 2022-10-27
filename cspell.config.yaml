@@ -6,6 +6,7 @@ words:
   - Artboard
   - artboards
   - cupertino
+  - posix
   - pubspec
 ignoreWords: []
 import: []

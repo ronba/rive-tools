@@ -115,7 +115,10 @@ void main(List<String> arguments) {
   }
 
   if (configuration.formatOutput) {
-    Process.runSync('flutter',
-        ['format', configuration.generatedFiledOutput.path, '--fix']);
+    var generatedOutputPath = configuration.generatedFiledOutput.path;
+    if (Platform.isWindows) {
+      generatedOutputPath = windows.joinAll(posix.split(generatedOutputPath));
+    }
+    Process.runSync('flutter', ['format', generatedOutputPath, '--fix']);
   }
 }
