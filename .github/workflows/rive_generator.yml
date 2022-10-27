@@ -3,11 +3,10 @@
 # separate terms of service, privacy policy, and support
 # documentation.
 
-name: Dart
+name: Test Rive Generator
 
 on:
   workflow_dispatch:
-    
 
 jobs:
   build:
@@ -24,7 +23,7 @@ jobs:
           flutter-version: ${{ env.FLUTTER_VERSION }}
           channel: ${{ env.FLUTTER_CHANNEL }}
 
-      - name: Install dependencies
+      - name: Run generator
         run: |
           cd packages/rive_generator/example
           flutter pub get
