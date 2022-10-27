@@ -10,8 +10,4 @@ extension StringExtension on String {
   String removeWhitespace() {
     return replaceAll(' ', '');
   }
-
-  String removeIllegalCharacters() {
-    return replaceAll(RegExp(r'[^A-Za-z0-9$_]'), '');
-  }
 }

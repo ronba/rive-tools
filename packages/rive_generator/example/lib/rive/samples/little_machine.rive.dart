@@ -24,7 +24,7 @@ class Little_machine {
 
   NewArtboard? _newArtboard;
   NewArtboard get newArtboard =>
-      _newArtboard ??= NewArtboard(file.artboardByName('New Artboard')!);
+      _newArtboard ??= NewArtboard(file.artboardByName(r'New Artboard')!);
 }
 
 class NewArtboard {
@@ -42,10 +42,10 @@ class NewArtboard {
 }
 
 class NewArtboardAnimations {
-  final String idlelight = "Idle light";
-  final String idle = "Idle";
-  final String work = "Work";
-  final String insert_data = "Insert_data";
+  final String idlelight = r"Idle light";
+  final String idle = r"Idle";
+  final String work = r"Work";
+  final String insert_data = r"Insert_data";
   const NewArtboardAnimations();
 }
 
@@ -53,5 +53,5 @@ class NewArtboardStateMachine1StateMachine {
   final rive.StateMachineController controller;
   final rive.SMITrigger trigger1;
   NewArtboardStateMachine1StateMachine(this.controller)
-      : trigger1 = controller.findInput<bool>('Trigger 1') as rive.SMITrigger;
+      : trigger1 = controller.findInput<bool>(r'Trigger 1') as rive.SMITrigger;
 }

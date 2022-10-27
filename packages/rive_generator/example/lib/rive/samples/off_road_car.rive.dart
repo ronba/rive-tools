@@ -23,7 +23,7 @@ class Off_road_car {
 
   NewArtboard? _newArtboard;
   NewArtboard get newArtboard =>
-      _newArtboard ??= NewArtboard(file.artboardByName('New Artboard')!);
+      _newArtboard ??= NewArtboard(file.artboardByName(r'New Artboard')!);
 }
 
 class NewArtboard {
@@ -41,11 +41,11 @@ class NewArtboard {
 }
 
 class NewArtboardAnimations {
-  final String idle = "idle";
-  final String bouncing = "bouncing";
-  final String windshield_wipers = "windshield_wipers";
-  final String broken = "broken";
-  final String untitled1 = "Untitled 1";
+  final String idle = r"idle";
+  final String bouncing = r"bouncing";
+  final String windshield_wipers = r"windshield_wipers";
+  final String broken = r"broken";
+  final String untitled1 = r"Untitled 1";
   const NewArtboardAnimations();
 }
 
