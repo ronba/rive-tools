@@ -87,15 +87,16 @@ class $type {
   final rive.Artboard artboard;
   $type(this.artboard);
 
-  final animations = const $animationClassName();
-
+  ${artboard.animations.isNotEmpty ? 'final animations = const $animationClassName();\n' : ''}
   ${stateMachines.map((e) => e[1]).join('\n')}
 }
 
+${artboard.animations.isNotEmpty ? '''
 class $animationClassName {
 ${artboard.animations.map((e) => '  final String ${GeneratedSymbol(e.name).asMember} = r"${e.name}";').join('\n')}
   const $animationClassName();
 }
+''' : ''}
 
 ${stateMachines.map((e) => e[0]).join('\n')}
 ''';
