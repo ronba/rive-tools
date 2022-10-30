@@ -22,8 +22,10 @@ class Numbers_and_symbols {
   }
 
   T1New$$Artboard_? _m1New$$Artboard_;
-  T1New$$Artboard_ get m1New$$Artboard_ => _m1New$$Artboard_ ??=
-      T1New$$Artboard_(file.artboardByName(r'1 New $$ Artboard_')!);
+  T1New$$Artboard_ get m1New$$Artboard_ =>
+      _m1New$$Artboard_ ??= T1New$$Artboard_(file.artboards
+          .where((artboard) => artboard.name == r'1 New $$ Artboard_')
+          .elementAt(0));
 }
 
 class T1New$$Artboard_ {

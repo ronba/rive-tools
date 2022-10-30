@@ -1,12 +1,15 @@
 version: "0.2"
-ignorePaths: []
+ignorePaths:
+  - "**/*.rive.dart"
 dictionaryDefinitions: []
 dictionaries: []
 words:
   - Artboard
   - artboards
   - cupertino
+  - kuhnroyal
   - posix
   - pubspec
+  - subosito
 ignoreWords: []
 import: []

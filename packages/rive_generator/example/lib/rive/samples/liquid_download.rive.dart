@@ -23,8 +23,9 @@ class Liquid_download {
   }
 
   Artboard? _artboard;
-  Artboard get artboard =>
-      _artboard ??= Artboard(file.artboardByName(r'Artboard')!);
+  Artboard get artboard => _artboard ??= Artboard(file.artboards
+      .where((artboard) => artboard.name == r'Artboard')
+      .elementAt(0));
 }
 
 class Artboard {

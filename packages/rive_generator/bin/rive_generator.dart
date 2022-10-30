@@ -7,6 +7,128 @@ import 'package:rive_generator/src/artboard_template.dart';
 import 'package:rive_generator/src/rive_reader.dart';
 import 'package:yaml/yaml.dart';
 
+void main(List<String> arguments) {
+  Logger.root.level = Level.FINEST;
+  Logger.root.onRecord.listen((record) {
+    print(
+        '[${record.loggerName}] ${record.level.name}: ${record.time}: ${record.message}');
+  });
+  final log = Logger('main');
+  final configuration = RiveGeneratorConfiguration.fromYaml(
+      loadYaml(File('pubspec.yaml').readAsStringSync()) as YamlMap);
+
+  log.config('Loaded configuration: $configuration');
+
+  if (configuration.clearGeneratedFileOutput) {
+    configuration.generatedFiledOutput
+        .listSync(recursive: true)
+        .whereType<File>()
+        .where(
+            (element) => extension(element.path, 2) == generatedFileExtension)
+        .forEach((element) {
+      log.info('Removing element: ${element.path}.');
+      element.deleteSync();
+    });
+  }
+
+  for (final entity
+      in configuration.assetsDirectory.listSync(recursive: true)) {
+    if (entity is! File || extension(entity.path) != '.riv') continue;
+    final pathWithoutAssets =
+        relative(entity.path, from: configuration.assetsDirectory.path);
+    final outputFileName = join(configuration.generatedFiledOutput.path,
+        setExtension(pathWithoutAssets, generatedFileExtension));
+    log.finest('Generated file name: ${entity.path} -> $outputFileName');
+
+    RiveReader? rive;
+    try {
+      rive = RiveReader.read(ByteData.view(entity.readAsBytesSync().buffer));
+    } catch (e, s) {
+      log.warning('Failed to parse ${entity.path}.', e, s);
+      print(e);
+      print(s);
+      continue;
+    }
+
+    final className = setExtension(basename(entity.path), '');
+
+    final artboardsByName = <String, List<Artboard>>{};
+    for (var artboard in rive.artboards) {
+      if (artboardsByName.containsKey(artboard.name)) {
+        artboardsByName[artboard.name]!.add(artboard);
+      } else {
+        artboardsByName[artboard.name] = [artboard];
+      }
+    }
+
+    final List<GeneratedArtboard> generatedArtboards = [];
+    for (var artboardByName in artboardsByName.entries) {
+      final warnings = <String>[];
+      if (artboardByName.value.length > 1) {
+        warnings.add('Multiple artboards with the same name are not allowed. ');
+      }
+
+      if (artboardByName.key == defaultArtboardName) {
+        warnings.add(
+          'Artboards with the default name "$defaultArtboardName" will be '
+          'skipped. To generate code for this artboard, change its name.',
+        );
+      }
+
+      if (warnings.isNotEmpty) {
+        log.warning(
+          'Skipping code generation for artboard(s) with name "${artboardByName.key}":'
+          '\n${warnings.map((e) => '  - $e').join('\n')}',
+        );
+
+        continue;
+      }
+
+      final artboard = artboardByName.value.first;
+      final symbol = GeneratedSymbol(artboard.name);
+
+      generatedArtboards
+          .add(GeneratedArtboard(artboard, symbol.asMember, symbol.asType));
+    }
+
+    if (generatedArtboards.isEmpty) {
+      log.warning('File ${entity.path} has no artboards. Skipping generation.');
+      continue;
+    }
+    File(outputFileName)
+      ..createSync(recursive: true)
+      ..writeAsStringSync(lazyRiveFileTemplate(
+          RiveInfo(
+            className,
+            relative(
+              configuration.assetsDirectory.path,
+              from: current,
+            ),
+            pathWithoutAssets,
+          ),
+          generatedArtboards
+            ..sort(
+              (a, b) => a.name.compareTo(b.name),
+            )));
+  }
+
+  if (configuration.formatOutput) {
+    var generatedOutputPath = configuration.generatedFiledOutput.path;
+    if (Platform.isWindows) {
+      generatedOutputPath = windows.joinAll(posix.split(generatedOutputPath));
+    }
+    Process.runSync(
+      'flutter',
+      ['format', generatedOutputPath, '--fix'],
+      runInShell: true,
+    );
+  }
+}
+
+const String defaultArtboardName = "New Artboard";
+
+const String generatedFileExtension = '.rive.dart';
+
 class RiveGeneratorConfiguration {
   static final log = Logger('RiveGeneratorConfiguration');
   static const String _riveGeneratorConfigurationKey = 'rive_generator';
@@ -20,14 +142,20 @@ class RiveGeneratorConfiguration {
   static final String _formatOutputKey = 'format_output';
   static final bool _formatOutputDefaultValue = true;
 
-  final Directory assetsDirectory; // = "assets";
+  static final String _clearOutputBeforeGenerationKey =
+      'clear_output_directory_before_generation';
+  static final bool _clearOutputBeforeGenerationValue = true;
+
+  final Directory assetsDirectory;
   final Directory generatedFiledOutput;
+  final bool clearGeneratedFileOutput;
   final bool formatOutput;
 
   factory RiveGeneratorConfiguration.fromYaml(YamlMap pubspec) {
     var assets = _assetDirectoryDefaultValue;
     var outputDirectory = _outputDirectoryDefaultValue;
     var formatOutput = _formatOutputDefaultValue;
+    var clearOutputBeforeGeneration = _clearOutputBeforeGenerationValue;
 
     if (pubspec.containsKey(_riveGeneratorConfigurationKey)) {
       final configuration = pubspec[_riveGeneratorConfigurationKey];
@@ -46,12 +174,18 @@ class RiveGeneratorConfiguration {
         if (configuration.containsKey(_formatOutputKey)) {
           formatOutput = configuration[_formatOutputKey];
         }
+        if (configuration.containsKey(_clearOutputBeforeGenerationKey)) {
+          clearOutputBeforeGeneration =
+              configuration[_clearOutputBeforeGenerationKey];
+        }
       }
     }
+
     return RiveGeneratorConfiguration._(
-      assetsDirectory: Directory(assets),
+      assetsDirectory: Directory(join(current, assets)),
       formatOutput: formatOutput,
-      generatedFiledOutput: Directory(outputDirectory),
+      generatedFiledOutput: Directory(join(current, outputDirectory)),
+      clearGeneratedFileOutput: clearOutputBeforeGeneration,
     );
   }
 
@@ -59,70 +193,15 @@ class RiveGeneratorConfiguration {
     required this.assetsDirectory,
     required this.formatOutput,
     required this.generatedFiledOutput,
+    required this.clearGeneratedFileOutput,
   });
 
   @override
   String toString() {
-    return 'RiveGeneratorConfiguration(assetsDirectory: $assetsDirectory, generatedFiledOutput: $generatedFiledOutput)';
-  }
-}
-
-void main(List<String> arguments) {
-  Logger.root.level = Level.FINEST;
-  Logger.root.onRecord.listen((record) {
-    print(
-        '[${record.loggerName}] ${record.level.name}: ${record.time}: ${record.message}');
-  });
-  final log = Logger('main');
-  final configuration = RiveGeneratorConfiguration.fromYaml(
-      loadYaml(File('pubspec.yaml').readAsStringSync()) as YamlMap);
-
-  log.info('Loaded configuration: $configuration');
-
-  for (final entity
-      in configuration.assetsDirectory.listSync(recursive: true)) {
-    if (entity is! File || extension(entity.path) != '.riv') continue;
-    final pathWithoutAssets =
-        relative(entity.path, from: configuration.assetsDirectory.path);
-    final outputFileName = join(configuration.generatedFiledOutput.path,
-        setExtension(pathWithoutAssets, '.rive.dart'));
-    log.finest('Generated file name: ${entity.path} -> $outputFileName');
-
-    RiveReader? rive;
-    try {
-      rive = RiveReader.read(ByteData.view(entity.readAsBytesSync().buffer));
-    } catch (e, s) {
-      log.warning('Failed to parse ${entity.path}.', e, s);
-      print(e);
-      print(s);
-      continue;
-    }
-
-    final className = setExtension(basename(entity.path), '');
-
-    File(outputFileName)
-      ..createSync(recursive: true)
-      ..writeAsStringSync(lazyRiveFileTemplate(
-          RiveInfo(
-            className,
-            configuration.assetsDirectory.path,
-            pathWithoutAssets,
-          ),
-          rive.artboards.map(GeneratedArtboard.new).toList()
-            ..sort(
-              (a, b) => a.name.compareTo(b.name),
-            )));
-  }
-
-  if (configuration.formatOutput) {
-    var generatedOutputPath = configuration.generatedFiledOutput.path;
-    if (Platform.isWindows) {
-      generatedOutputPath = windows.joinAll(posix.split(generatedOutputPath));
-    }
-    Process.runSync(
-      'flutter',
-      ['format', generatedOutputPath, '--fix'],
-      runInShell: true,
-    );
+    return 'RiveGeneratorConfiguration('
+        'assetsDirectory: $assetsDirectory, '
+        'generatedFiledOutput: $generatedFiledOutput, '
+        'clearGeneratedFileOutput: $clearGeneratedFileOutput, '
+        'formatOutput: $formatOutput)';
   }
 }

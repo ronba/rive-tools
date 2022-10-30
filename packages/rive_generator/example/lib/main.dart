@@ -1,4 +1,4 @@
-import 'package:example/rive/samples/rocket.rive.dart';
+import 'package:example/rive/samples/liquid_download.rive.dart' as l;
 import 'package:flutter/material.dart';
 import 'package:rive/rive.dart';
 
@@ -6,84 +6,84 @@ void main() {
   runApp(const MyApp());
 }
 
+const addProgressKey = Key('Add Progress');
+const startKey = ValueKey('Start');
+
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Rive Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+    return const MaterialApp(
+      title: 'Rive Asset Generation - Demo',
+      home: MyHomePage(),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  final String title;
+  const MyHomePage({super.key});
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  Rocket? rocket;
-  NewArtboardButtonStateMachine? rocketController;
-
-  @override
-  void initState() {
-    super.initState();
-    Rocket.load().then((r) async {
-      setState(() {
-        rocket = r;
-        rocketController = r.newArtboard.getNewArtboardButtonStateMachine();
-        r.newArtboard.artboard.addController(rocketController!.controller);
-      });
-    });
-  }
+  l.Liquid_download? liquid;
+  l.ArtboardDownloadStateMachine? liquidController;
 
   @override
   Widget build(BuildContext context) {
-    final rocket = this.rocket;
+    final rocket = liquid;
     return ListView(
       children: [
         SizedBox.square(
           dimension: 200,
           child: RiveAnimation.asset(
-            Rocket.assetPath,
-            animations: [const NewArtboardAnimations().press],
+            l.Liquid_download.assetPath,
+            animations: [const l.ArtboardAnimations().complete],
           ),
         ),
         if (rocket != null) ...[
           SizedBox.square(
             dimension: 200,
             child: Rive(
-              artboard: rocket.newArtboard.artboard,
+              artboard: liquid!.artboard.artboard,
             ),
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               MaterialButton(
+                key: startKey,
                 onPressed: () {
-                  rocketController?.hover.value = true;
+                  liquidController!.download.fire();
                 },
-                child: const Text('hover!'),
+                child: const Text('Start'),
               ),
               MaterialButton(
+                key: addProgressKey,
                 onPressed: () {
-                  rocketController?.press.value = true;
+                  liquidController!.progress.value += 10;
                 },
-                child: const Text('press!'),
+                child: const Text('Add Progress!'),
               ),
             ],
           )
         ]
       ],
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    l.Liquid_download.load().then((r) async {
+      setState(() {
+        liquid = r;
+        liquidController = r.artboard.getArtboardDownloadStateMachine();
+        r.artboard.artboard.addController(liquidController!.controller);
+      });
+    });
   }
 }
