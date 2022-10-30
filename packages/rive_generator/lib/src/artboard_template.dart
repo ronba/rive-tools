@@ -32,7 +32,7 @@ ${generatedArtboards.map((e) {
     final lower = e.member;
     return '''
   ${e.type}? _$lower;
-  ${e.type} get $lower => _$lower ??= ${e.type}(file.artboardByName(r'${e.name}')!);
+  ${e.type} get $lower => _$lower ??= ${e.type}(file.artboards.where((artboard) => artboard.name == r'${e.name}').elementAt(${e.artboard.index}));
     ''';
   }).join('\n')}
 
@@ -44,13 +44,12 @@ ${generatedArtboards.map((e) => e.generatedClass()).join('\n')}
 
 class GeneratedArtboard {
   final Artboard artboard;
-  final GeneratedSymbol symbol;
+  final String member;
+  final String name;
+  final String type;
 
-  GeneratedArtboard(this.artboard) : symbol = GeneratedSymbol(artboard.name);
-
-  String get member => symbol.asMember;
-  String get name => artboard.name;
-  String get type => symbol.asType;
+  GeneratedArtboard(this.artboard, this.member, this.type)
+      : name = artboard.name;
 
   String generatedClass() {
     final animationClassName = '${type}Animations';
@@ -87,15 +86,16 @@ class $type {
   final rive.Artboard artboard;
   $type(this.artboard);
 
-  final animations = const $animationClassName();
-
+  ${artboard.animations.isNotEmpty ? 'final animations = const $animationClassName();\n' : ''}
   ${stateMachines.map((e) => e[1]).join('\n')}
 }
 
+${artboard.animations.isNotEmpty ? '''
 class $animationClassName {
 ${artboard.animations.map((e) => '  final String ${GeneratedSymbol(e.name).asMember} = r"${e.name}";').join('\n')}
   const $animationClassName();
 }
+''' : ''}
 
 ${stateMachines.map((e) => e[0]).join('\n')}
 ''';

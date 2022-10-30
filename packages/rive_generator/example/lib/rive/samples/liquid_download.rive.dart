@@ -7,31 +7,11 @@ import 'package:rive/src/rive_core/state_machine_controller.dart' as core;
 
 const assetsBaseFolder = "assets";
 
-class Liquid_download {
-  final rive.RiveFile file;
-  static String get assetPath {
-    return (kIsWeb ? '' : assetsBaseFolder + '/') +
-        'samples/liquid_download.riv';
-  }
-
-  Liquid_download._(this.file);
-
-  static Future<Liquid_download> load() async {
-    final riveFile =
-        rive.RiveFile.import(await rootBundle.load(Liquid_download.assetPath));
-    return Liquid_download._(riveFile);
-  }
-
-  Artboard? _artboard;
-  Artboard get artboard =>
-      _artboard ??= Artboard(file.artboardByName(r'Artboard')!);
-}
-
 class Artboard {
   final rive.Artboard artboard;
-  Artboard(this.artboard);
-
   final animations = const ArtboardAnimations();
+
+  Artboard(this.artboard);
 
   ArtboardDownloadStateMachine getArtboardDownloadStateMachine(
       [core.OnStateChange? onStateChange]) {
@@ -62,4 +42,26 @@ class ArtboardDownloadStateMachine {
       : download = controller.findInput<bool>(r'Download') as rive.SMITrigger,
         progress = controller.findInput<double>(r'Progress') as rive.SMINumber,
         indetMix = controller.findInput<double>(r'Indet Mix') as rive.SMINumber;
+}
+
+class Liquid_download {
+  static String get assetPath {
+    return (kIsWeb ? '' : assetsBaseFolder + '/') +
+        'samples/liquid_download.riv';
+  }
+
+  final rive.RiveFile file;
+
+  Artboard? _artboard;
+
+  Liquid_download._(this.file);
+
+  Artboard get artboard => _artboard ??= Artboard(file.artboards
+      .where((artboard) => artboard.name == r'Artboard')
+      .elementAt(0));
+  static Future<Liquid_download> load() async {
+    final riveFile =
+        rive.RiveFile.import(await rootBundle.load(Liquid_download.assetPath));
+    return Liquid_download._(riveFile);
+  }
 }

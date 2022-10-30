@@ -8,29 +8,32 @@ import 'package:rive/src/rive_core/state_machine_controller.dart' as core;
 const assetsBaseFolder = "assets";
 
 class Numbers_and_symbols {
-  final rive.RiveFile file;
   static String get assetPath {
     return (kIsWeb ? '' : assetsBaseFolder + '/') + 'numbers_and_symbols.riv';
   }
 
+  final rive.RiveFile file;
+
+  T1New$$Artboard_? _m1New$$Artboard_;
+
   Numbers_and_symbols._(this.file);
 
+  T1New$$Artboard_ get m1New$$Artboard_ =>
+      _m1New$$Artboard_ ??= T1New$$Artboard_(file.artboards
+          .where((artboard) => artboard.name == r'1 New $$ Artboard_')
+          .elementAt(0));
   static Future<Numbers_and_symbols> load() async {
     final riveFile = rive.RiveFile.import(
         await rootBundle.load(Numbers_and_symbols.assetPath));
     return Numbers_and_symbols._(riveFile);
   }
-
-  T1New$$Artboard_? _m1New$$Artboard_;
-  T1New$$Artboard_ get m1New$$Artboard_ => _m1New$$Artboard_ ??=
-      T1New$$Artboard_(file.artboardByName(r'1 New $$ Artboard_')!);
 }
 
 class T1New$$Artboard_ {
   final rive.Artboard artboard;
-  T1New$$Artboard_(this.artboard);
-
   final animations = const T1New$$Artboard_Animations();
+
+  T1New$$Artboard_(this.artboard);
 
   T1New$$Artboard_T1Button_StateMachine
       getT1New$$Artboard_T1Button_StateMachine(

@@ -6,34 +6,33 @@ import 'package:rive/src/rive_core/runtime/runtime_header.dart';
 import 'package:rive/src/utilities/binary_buffer/binary_reader.dart';
 import 'package:rive_generator/src/rive_properties.dart';
 
-enum RiveType {
-  booleanType,
-  bytes,
-  color,
-  doubleType,
-  stringType,
-  uint,
-  unknown;
+class Animation {
+  final String name;
 
-  static RiveType fromString(String name) {
-    switch (name.toLowerCase()) {
-      case "double":
-        return RiveType.doubleType;
-      case "bytes":
-        return RiveType.bytes;
-      case "string":
-        return RiveType.stringType;
-      case "id":
-      case "uint":
-        return RiveType.uint;
-      case "boolean":
-      case "bool":
-        return RiveType.booleanType;
-      case "color":
-        return RiveType.color;
-    }
+  Animation(this.name);
 
-    return RiveType.unknown;
+  @override
+  String toString() {
+    return 'Animations(name: $name)';
+  }
+}
+
+class Artboard {
+  final String name;
+  List<StateMachine> stateMachines = [];
+  Set<Animation> animations = {};
+
+  // The number of times we've seen this name before.
+  final int index;
+
+  Artboard(this.name, this.index);
+
+  @override
+  String toString() {
+    return 'Artboard('
+        'name: $name, '
+        'animations: $animations, '
+        'stateMachines: $stateMachines)';
   }
 }
 
@@ -48,6 +47,8 @@ class Context {
 }
 
 class RiveReader {
+  final List<Artboard> artboards;
+
   RiveReader({required this.artboards});
 
   factory RiveReader.read(ByteData byteData) {
@@ -123,7 +124,10 @@ class RiveReader {
               case Context.artboard:
                 // Artboard name property.
                 if (r == 4) {
-                  artboards.add(Artboard(s));
+                  artboards.add(Artboard(
+                    s,
+                    artboards.where((element) => element.name == s).length,
+                  ));
                 }
                 break;
               case Context.stateMachine:
@@ -165,23 +169,36 @@ class RiveReader {
 
     return RiveReader(artboards: artboards);
   }
-
-  final List<Artboard> artboards;
 }
 
-class Artboard {
-  final String name;
-  List<StateMachine> stateMachines = [];
-  Set<Animation> animations = {};
+enum RiveType {
+  booleanType,
+  bytes,
+  color,
+  doubleType,
+  stringType,
+  uint,
+  unknown;
 
-  Artboard(this.name);
+  static RiveType fromString(String name) {
+    switch (name.toLowerCase()) {
+      case "double":
+        return RiveType.doubleType;
+      case "bytes":
+        return RiveType.bytes;
+      case "string":
+        return RiveType.stringType;
+      case "id":
+      case "uint":
+        return RiveType.uint;
+      case "boolean":
+      case "bool":
+        return RiveType.booleanType;
+      case "color":
+        return RiveType.color;
+    }
 
-  @override
-  String toString() {
-    return 'Artboard('
-        'name: $name, '
-        'animations: $animations, '
-        'stateMachines: $stateMachines)';
+    return RiveType.unknown;
   }
 }
 
@@ -211,16 +228,5 @@ class StateMachineTrigger {
   @override
   String toString() {
     return 'StateMachineTrigger(name: $name, type: $type)';
-  }
-}
-
-class Animation {
-  final String name;
-
-  Animation(this.name);
-
-  @override
-  String toString() {
-    return 'Animations(name: $name)';
   }
 }

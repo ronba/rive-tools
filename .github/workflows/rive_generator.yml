@@ -29,3 +29,4 @@ jobs:
           flutter pub get
           flutter pub run rive_generator
           flutter analyze
+          flutter test
