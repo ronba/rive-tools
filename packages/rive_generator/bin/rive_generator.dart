@@ -91,6 +91,18 @@ void main(List<String> arguments) {
           .add(GeneratedArtboard(artboard, symbol.asMember, symbol.asType));
     }
 
+    var posixPathWithoutAssets = pathWithoutAssets;
+    var posixAssetsBaseFolder = relative(
+      configuration.assetsDirectory.path,
+      from: current,
+    );
+    if (Platform.isWindows) {
+      posixPathWithoutAssets =
+          posix.joinAll(windows.split(posixPathWithoutAssets));
+      posixAssetsBaseFolder =
+          posix.joinAll(windows.split(posixAssetsBaseFolder));
+    }
+
     if (generatedArtboards.isEmpty) {
       log.warning('File ${entity.path} has no artboards. Skipping generation.');
       continue;
@@ -100,11 +112,8 @@ void main(List<String> arguments) {
       ..writeAsStringSync(lazyRiveFileTemplate(
           RiveInfo(
             className,
-            relative(
-              configuration.assetsDirectory.path,
-              from: current,
-            ),
-            pathWithoutAssets,
+            posixAssetsBaseFolder,
+            posixPathWithoutAssets,
           ),
           generatedArtboards
             ..sort(
