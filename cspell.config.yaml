@@ -4,8 +4,10 @@ ignorePaths:
 dictionaryDefinitions: []
 dictionaries: []
 words:
+  - antialiasing
   - Artboard
   - artboards
+  - autoplay
   - cupertino
   - kuhnroyal
   - posix

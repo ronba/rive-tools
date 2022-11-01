@@ -8,28 +8,6 @@ import 'package:rive/src/rive_core/state_machine_controller.dart' as core;
 
 const assetsBaseFolder = "assets";
 
-String _assetPath() {
-  return (kIsWeb ? '' : assetsBaseFolder + '/') + 'samples/liquid_download.riv';
-}
-
-class Liquid_download {
-  final rive.RiveFile file;
-  static String get assetPath => _assetPath();
-
-  Liquid_download._(this.file);
-
-  static Future<Liquid_download> load() async {
-    final riveFile =
-        rive.RiveFile.import(await rootBundle.load(Liquid_download.assetPath));
-    return Liquid_download._(riveFile);
-  }
-
-  Artboard? _artboard;
-  Artboard get artboard => _artboard ??= Artboard(file.artboards
-      .where((artboard) => artboard.name == r'Artboard')
-      .elementAt(0));
-}
-
 class Artboard {
   final rive.Artboard artboard;
   Artboard(this.artboard);
@@ -39,22 +17,6 @@ class Artboard {
     return ArtboardDownloadStateMachine(
         this.artboard.stateMachineByName("Download", onChange: onStateChange)!);
   }
-}
-
-abstract class ArtboardController {
-  abstract final rive.RiveAnimationController controller;
-}
-
-class ArtboardSimpleAnimation extends ArtboardController {
-  final rive.RiveAnimationController controller;
-
-  ArtboardSimpleAnimation(this.controller);
-}
-
-class ArtboardOneShotAnimation extends ArtboardController {
-  final rive.RiveAnimationController controller;
-
-  ArtboardOneShotAnimation(this.controller);
 }
 
 enum ArtboardAnimations {
@@ -93,6 +55,10 @@ enum ArtboardAnimations {
   }
 }
 
+abstract class ArtboardController {
+  abstract final rive.RiveAnimationController controller;
+}
+
 class ArtboardDownloadStateMachine {
   final rive.StateMachineController controller;
   final rive.SMITrigger download;
@@ -104,34 +70,40 @@ class ArtboardDownloadStateMachine {
         indetMix = controller.findInput<double>(r'Indet Mix') as rive.SMINumber;
 }
 
+class ArtboardOneShotAnimation extends ArtboardController {
+  final rive.RiveAnimationController controller;
+
+  ArtboardOneShotAnimation(this.controller);
+}
+
 class ArtboardRive extends StatelessWidget {
   final List<ArtboardAnimations> animations;
-  final Alignment? alignment;
+  final Alignment alignment;
   final bool antialiasing;
   final List<ArtboardController> controllers;
-  final BoxFit? fit;
+  final BoxFit fit;
   final Function(Artboard artboard)? onInit;
-  final Widget? placeHolder;
+  final Widget placeHolder;
 
   const ArtboardRive({
     super.key,
-    this.animations = const [],
-    this.alignment,
-    this.antialiasing = true,
-    this.controllers = const [],
-    this.fit,
-    this.onInit,
-    this.placeHolder,
+    required this.animations,
+    required this.alignment,
+    required this.antialiasing,
+    required this.controllers,
+    required this.fit,
+    required this.onInit,
+    required this.placeHolder,
   });
 
   @override
   Widget build(BuildContext context) {
     return rive.RiveAnimation.asset(
-      _assetPath(),
+      Liquid_download.assetPath,
       animations: animations.map((e) => e.name).toList(),
       alignment: alignment,
       antialiasing: antialiasing,
-      artboard: r'Artboard',
+      artboard: 'Artboard',
       controllers: this.controllers.map((e) => e.controller).toList(),
       fit: fit,
       onInit: (p0) {
@@ -140,5 +112,33 @@ class ArtboardRive extends StatelessWidget {
       placeHolder: placeHolder,
       stateMachines: [],
     );
+  }
+}
+
+class ArtboardSimpleAnimation extends ArtboardController {
+  final rive.RiveAnimationController controller;
+
+  ArtboardSimpleAnimation(this.controller);
+}
+
+class Liquid_download {
+  static String get assetPath {
+    return (kIsWeb ? '' : assetsBaseFolder + '/') +
+        'samples/liquid_download.riv';
+  }
+
+  final rive.RiveFile file;
+
+  Artboard? _artboard;
+
+  Liquid_download._(this.file);
+
+  Artboard get artboard => _artboard ??= Artboard(file.artboards
+      .where((artboard) => artboard.name == r'Artboard')
+      .elementAt(0));
+  static Future<Liquid_download> load() async {
+    final riveFile =
+        rive.RiveFile.import(await rootBundle.load(Liquid_download.assetPath));
+    return Liquid_download._(riveFile);
   }
 }

@@ -37,11 +37,16 @@ class _MyHomePageState extends State<MyHomePage> {
     final rocket = liquid;
     return ListView(
       children: [
-        SizedBox.square(
+        const SizedBox.square(
           dimension: 200,
-          child: RiveAnimation.asset(
-            l.Liquid_download.assetPath,
-            animations: [const l.ArtboardAnimations().complete],
+          child: l.ArtboardRive(),
+        ),
+        const SizedBox.square(
+          dimension: 200,
+          child: l.ArtboardRive(
+            animations: [
+              l.ArtboardAnimations.complete,
+            ],
           ),
         ),
         if (rocket != null) ...[
