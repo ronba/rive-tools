@@ -49,6 +49,15 @@ class _MyHomePageState extends State<MyHomePage> {
             ],
           ),
         ),
+        SizedBox.square(
+          dimension: 200,
+          child: l.ArtboardRive(
+            controllers: [
+              l.ArtboardAnimations.demo.makeSimpleAnimation(),
+              l.ArtboardAnimations.complete.makeOneShotAnimation(),
+            ],
+          ),
+        ),
         if (rocket != null) ...[
           SizedBox.square(
             dimension: 200,
