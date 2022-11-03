@@ -4,7 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   testWidgets('Loads widget.', (tester) async {
     await tester.pumpWidget(const MyApp());
-    await tester.pumpAndSettle();
+    await tester.scrollUntilVisible(find.byKey(startKey), 20);
 
     await tester.tap(find.byKey(startKey));
     await tester.tap(find.byKey(addProgressKey));
