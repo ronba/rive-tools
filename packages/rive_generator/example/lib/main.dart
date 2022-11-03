@@ -34,31 +34,10 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final rocket = liquid;
+    final liquidDownloader = liquid;
     return ListView(
       children: [
-        const SizedBox.square(
-          dimension: 200,
-          child: l.ArtboardRive(),
-        ),
-        const SizedBox.square(
-          dimension: 200,
-          child: l.ArtboardRive(
-            animations: [
-              l.ArtboardAnimations.complete,
-            ],
-          ),
-        ),
-        SizedBox.square(
-          dimension: 200,
-          child: l.ArtboardRive(
-            controllers: [
-              l.ArtboardAnimations.demo.makeSimpleAnimation(),
-              l.ArtboardAnimations.complete.makeOneShotAnimation(),
-            ],
-          ),
-        ),
-        if (rocket != null) ...[
+        if (liquidDownloader != null) ...[
           SizedBox.square(
             dimension: 200,
             child: Rive(
@@ -84,7 +63,28 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ],
           )
-        ]
+        ],
+        const SizedBox.square(
+          dimension: 200,
+          child: l.ArtboardRive(),
+        ),
+        const SizedBox.square(
+          dimension: 200,
+          child: l.ArtboardRive(
+            animations: [
+              l.ArtboardAnimations.complete,
+            ],
+          ),
+        ),
+        SizedBox.square(
+          dimension: 200,
+          child: l.ArtboardRive(
+            controllers: [
+              l.ArtboardAnimations.demo.makeSimpleAnimation(),
+              l.ArtboardAnimations.complete.makeOneShotAnimation(),
+            ],
+          ),
+        ),
       ],
     );
   }
