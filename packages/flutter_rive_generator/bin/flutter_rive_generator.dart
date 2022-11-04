@@ -1,10 +1,10 @@
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:flutter_rive_generator/src/artboard_template.dart';
+import 'package:flutter_rive_generator/src/rive_reader.dart';
 import 'package:logging/logging.dart';
 import 'package:path/path.dart';
-import 'package:rive_generator/src/artboard_template.dart';
-import 'package:rive_generator/src/rive_reader.dart';
 import 'package:yaml/yaml.dart';
 
 void main(List<String> arguments) {
@@ -140,7 +140,7 @@ const String generatedFileExtension = '.rive.dart';
 
 class RiveGeneratorConfiguration {
   static final log = Logger('RiveGeneratorConfiguration');
-  static const String _riveGeneratorConfigurationKey = 'rive_generator';
+  static const String _riveGeneratorConfigurationKey = 'flutter_rive_generator';
 
   static const String _assetDirectoryKey = "assets";
   static const String _assetDirectoryDefaultValue = "assets";

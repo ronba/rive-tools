@@ -26,8 +26,8 @@ jobs:
 
       - name: Run generator
         run: |
-          cd packages/rive_generator/example
+          cd packages/flutter_rive_generator/example
           flutter pub get
-          flutter pub run rive_generator
+          flutter pub run flutter_rive_generator
           flutter analyze
           flutter test

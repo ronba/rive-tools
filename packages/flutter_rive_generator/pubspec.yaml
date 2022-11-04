@@ -1,7 +1,7 @@
-name: rive_generator
+name: flutter_rive_generator
 description: Command line application to generate code from rive files.
 version: 0.1.0
-repository: https://github.com/ronba/rive-tools/tree/main/packages/rive_generator
+repository: https://github.com/ronba/rive-tools/tree/main/packages/flutter_rive_generator
 homepage: https://github.com/ronba/rive-tools
 
 environment:

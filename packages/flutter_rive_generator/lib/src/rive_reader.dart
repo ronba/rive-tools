@@ -1,10 +1,10 @@
 import 'dart:typed_data';
 
+import 'package:flutter_rive_generator/src/rive_properties.dart';
 // ignore: implementation_imports
 import 'package:rive/src/rive_core/runtime/runtime_header.dart';
 // ignore: implementation_imports
 import 'package:rive/src/utilities/binary_buffer/binary_reader.dart';
-import 'package:rive_generator/src/rive_properties.dart';
 
 class Animation {
   final String name;

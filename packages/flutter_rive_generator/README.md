@@ -1,6 +1,6 @@
 Generates Flutter code from Rive files.
 
-rive_generator is a CLI which generates statically typed classes from your Rive files, giving you compile time safety when using artboards, animations and state machine triggers.
+flutter_rive_generator is a CLI which generates statically typed classes from your Rive files, giving you compile time safety when using artboards, animations and state machine triggers.
 
 # Warning
 
@@ -11,7 +11,7 @@ If you have comments, suggestions or feature requests, please let me know!
 
 Add a dependency or install globally.
 
-Then just run `flutter pub run rive_generator` from the command line.
+Then just run `flutter pub run flutter_rive_generator` from the command line.
 
 # What gets generated?
 
