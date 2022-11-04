@@ -1,7 +1,7 @@
 name: example
-description: A new Flutter project.
+description: A new Flutter project demonstrating usage of generated rive files.
 
-publish_to: "none" # Remove this line if you wish to publish to pub.dev
+publish_to: "none"
 
 version: 1.0.0+1
 
@@ -9,7 +9,7 @@ environment:
   sdk: ">=2.18.2 <3.0.0"
 
 dependencies:
-  rive_generator:
+  flutter_rive_generator:
     path: ../
   cupertino_icons: ^1.0.2
   flutter:
@@ -27,7 +27,7 @@ flutter:
     - "assets/samples/"
 
 # RiveGenerator Configuration:
-rive_generator:
+flutter_rive_generator:
   # Directory to scan for .riv files, by default it's assets.
   assets: assets
   # Whether to output files in the output directory.
