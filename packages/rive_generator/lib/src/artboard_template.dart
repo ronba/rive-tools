@@ -1,4 +1,4 @@
-import 'package:rive_generator/extensions/string.dart';
+import 'package:rive_generator/src/extensions/string.dart';
 import 'package:rive_generator/src/rive_reader.dart';
 
 String lazyRiveFileTemplate(
